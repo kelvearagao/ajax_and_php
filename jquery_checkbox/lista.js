@@ -1,5 +1,9 @@
 
+
+
 $("#deletar").click(function(){
+	
+
 	//var dataString = $("#myForm").serialize();
 
 	/*
@@ -21,12 +25,17 @@ $("#deletar").click(function(){
 		url : 'controle.php',
 		data : {dataArray: dataString},
 		success: function(response) {
-			
 			$("input[name='checkbox[]']:checked").parents("tr").remove();
+			
+			$('#botao_deletar').prop('disabled', true);
+			$("#botao_deletar").attr("href", "");
+			$("#check_root").prop('checked', false);
 			
 			$('#myResponse').html(response);
 		}
 	});
+
+
 
 	/*
 	alert('deletar');
@@ -49,11 +58,50 @@ $("#deletar").click(function(){
 
 //select and deselect
 $("#check_root").click(function () {
-	$('input:checkbox').prop('checked', this.checked);
+	$("input[name='checkbox[]']").prop('checked', this.checked);
+
+	if (this.checked)
+	{
+		$("#botao_deletar").attr("href", "#myModal");
+		$('#botao_deletar').prop('disabled', false);
+	}
+	else
+	{
+		$('#botao_deletar').prop('disabled', true);
+		$("#botao_deletar").attr("href", "");
+	}
 });
 
 //If one item deselect then button CheckAll is UnCheck
 $(".chkmark").click(function () {
-if (!$(this).is(':checked'))
-	$("#check_root").prop('checked', false);
+
+		var length = $("input[name='checkbox[]']").length;
+		var cont = 0;
+
+		$("input[name='checkbox[]']").each(function(){
+			if(this.checked)
+				cont++;
+		});
+
+		if (cont == length)
+		{
+			$("#check_root").prop('checked', true);
+			$("#botao_deletar").attr("href", "#myModal");
+			$('#botao_deletar').prop('disabled', false);		
+		}
+		else
+		{
+			if (cont > 0)
+			{
+				$("#check_root").prop('checked', false);
+				$("#botao_deletar").attr("href", "#myModal");
+				$('#botao_deletar').prop('disabled', false);
+			}
+			else
+			{
+				$('#botao_deletar').prop('disabled', true);
+				$("#botao_deletar").attr("href", "");			
+			}
+
+		}
 });
